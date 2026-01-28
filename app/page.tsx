@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -9,6 +10,8 @@ import { ScrollSmoother } from "gsap/ScrollSmoother";
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 }
+
+const gridItems = Array.from({ length: 9 }, (_, i) => i);
 
 export default function Home() {
   const mainRef = useRef<HTMLDivElement>(null);
@@ -179,7 +182,7 @@ export default function Home() {
     { scope: mainRef }
   );
 
-  const gridItems = Array.from({ length: 9 }, (_, i) => i);
+
 
   return (
     <div id="smooth-wrapper" ref={mainRef}>
@@ -189,8 +192,16 @@ export default function Home() {
           <div className="hero-container h-screen w-full relative overflow-hidden">
             <section className="hero w-full h-full relative flex items-center justify-center">
 
-              <div className="hero__bg absolute inset-0 bg-center bg-no-repeat bg-cover blur-[3px] brightness-150 z-0"
-                style={{ backgroundImage: "url('/hero-bg.png')" }}></div>
+              <div className="hero__bg absolute inset-0 z-0">
+                <Image
+                  src="/hero-bg.png"
+                  alt="Hero Background"
+                  fill
+                  className="object-cover blur-[3px] brightness-150"
+                  priority
+                  quality={90}
+                />
+              </div>
 
               <div className="grid-layer absolute z-20 w-full max-w-4xl p-4 aspect-square max-h-[80vh]">
 
@@ -202,10 +213,11 @@ export default function Home() {
                       return (
                         <div key={index} className="relative w-full h-full flex items-center justify-center z-20">
                           <div className="grid-center-image w-full h-full rounded-2xl overflow-hidden shadow-2xl opacity-0">
-                            <img
+                            <Image
                               src="/profile.jpg"
                               alt="Jainara"
-                              className="w-full h-full object-cover"
+                              fill
+                              className="object-cover"
                             />
                           </div>
                         </div>
@@ -213,10 +225,11 @@ export default function Home() {
                     } else {
                       return (
                         <div key={index} className="grid-item-project w-full h-full bg-zinc-800 rounded-xl overflow-hidden border border-white/10 opacity-0 relative group cursor-pointer">
-                          <img
+                          <Image
                             src={`https://picsum.photos/400?random=${index}`}
                             alt="Projeto"
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-110"
                           />
                           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                             <span className="text-white text-sm font-bold">Ver Projeto</span>
@@ -230,7 +243,13 @@ export default function Home() {
               </div>
 
               <div className="hero__cover absolute inset-0 z-50 flex items-center justify-center overflow-hidden pointer-events-none">
-                <img src="/door-open.png" alt="Door" className="hero__cover-img w-full h-full object-cover" />
+                <Image
+                  src="/door-open.png"
+                  alt="Door"
+                  fill
+                  className="hero__cover-img object-cover pointer-events-none"
+                  priority
+                />
               </div>
 
             </section>
@@ -260,9 +279,12 @@ export default function Home() {
               </div>
 
               <div className="w-full md:w-1/2 h-[50vh] md:h-screen md:sticky md:top-0">
-                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop"
+                <Image
+                  src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop"
                   alt="Architectural Detail"
-                  className="w-full h-full object-cover grayscale-20 contrast-[1.1]" />
+                  fill
+                  className="object-cover grayscale-20 contrast-[1.1]"
+                />
               </div>
             </div>
           </section>
