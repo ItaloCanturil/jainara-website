@@ -6,6 +6,8 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { ArrowUpRight } from "lucide-react";
+
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -288,6 +290,9 @@ export default function Home() {
                           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                             <span className="text-white text-sm font-bold">Ver Projeto</span>
                           </div>
+                          <div className="absolute bottom-4 right-4 z-30 text-white/40 group-hover:text-white transition-all duration-300">
+                            <ArrowUpRight size={18} strokeWidth={1.5} />
+                          </div>
                         </div>
                       );
                     }
@@ -357,7 +362,7 @@ export default function Home() {
             </div>
 
             <div className="container mx-auto px-12 md:px-24 relative z-10">
-              <h2 className="text-4xl md:text-5xl font-[family-name:var(--font-playfair)] text-[#1a1a1a] mb-24 md:text-center ml-8 md:ml-0">
+              <h2 className="text-4xl md:text-5xl font-(family-name:--font-playfair) text-[#1a1a1a] mb-24 md:text-center ml-8 md:ml-0">
                 Processo de Trabalho
               </h2>
 
@@ -390,7 +395,7 @@ export default function Home() {
                          ${index % 2 === 0 ? 'md:pl-32 text-left' : 'md:pr-32 md:text-right'}
                        `}>
                       <span className="text-xs font-bold tracking-widest text-zinc-400 block mb-2">0{index + 1}</span>
-                      <h3 className="text-2xl font-[family-name:var(--font-playfair)] text-[#1a1a1a] mb-2">{step.title}</h3>
+                      <h3 className="text-2xl font-(family-name:--font-playfair) text-[#1a1a1a] mb-2">{step.title}</h3>
                       <p className="text-zinc-600 font-sans leading-relaxed">{step.desc}</p>
                     </div>
                   </div>
