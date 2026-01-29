@@ -35,11 +35,6 @@ export default function Home() {
         },
       });
 
-      // --- Initial Ambient Animations (Breathing Grid & Scroll Indicator) ---
-
-
-
-      // 3. Profile SVG Drawing Animation
       gsap.set(".draw", { strokeDasharray: 1200, strokeDashoffset: 1200 });
 
       gsap.to(".draw", {
@@ -51,7 +46,6 @@ export default function Home() {
         repeatDelay: 1
       });
 
-      // 2. Scroll Indicator Bobbing
       gsap.to(".scroll-indicator", {
         y: 10,
         opacity: 1,
@@ -62,9 +56,6 @@ export default function Home() {
       });
 
 
-      // --- Main Scroll Timeline ---
-
-      // Fade out ambient elements immediately on scroll
       tl.to([".scroll-indicator", ".profile-svg-overlay"], {
         opacity: 0,
         duration: 0.5,
@@ -85,7 +76,6 @@ export default function Home() {
           duration: 2
         }, "<"); */
 
-      // Start large and visible, explicitly setting initial state
       tl.fromTo(".grid-center-image",
         {
           scale: 3,
@@ -122,10 +112,6 @@ export default function Home() {
         "-=1"
       );
 
-      // --- Manifesto Section Animations ---
-
-      // 1. Background Color Transition (Black -> Greige)
-      // We animate the opacity of the beige layer on top of the black background
       gsap.to(".manifesto-bg", {
         scrollTrigger: {
           trigger: ".manifesto-section",
@@ -137,7 +123,6 @@ export default function Home() {
         ease: "none"
       });
 
-      // 2. Text Reveal (Staggered Lines)
       const lines = gsap.utils.toArray<HTMLElement>(".manifesto-line");
       lines.forEach((line) => {
         gsap.to(line, {
@@ -154,7 +139,6 @@ export default function Home() {
         });
       });
 
-      // 3. Subtitle & CTA Reveal
       gsap.to([".manifesto-subtitle", ".manifesto-cta"], {
         scrollTrigger: {
           trigger: ".manifesto-section",
@@ -168,9 +152,6 @@ export default function Home() {
         ease: "power2.out"
       });
 
-      // --- Process Section Animations ---
-
-      // 1. Master Vertical Line Drawing
       gsap.to(".process-line-fill", {
         scrollTrigger: {
           trigger: ".process-section",
@@ -182,13 +163,10 @@ export default function Home() {
         ease: "none"
       });
 
-      // 2. Steps Reveal (Connectors & Content)
       const steps = gsap.utils.toArray<HTMLElement>(".process-step");
       steps.forEach((step) => {
         const connector = step.querySelector(".process-connector");
         const content = step.querySelector(".process-step-content");
-
-        // Reveal when the line passes the step
         const tlStep = gsap.timeline({
           scrollTrigger: {
             trigger: step,
@@ -201,7 +179,6 @@ export default function Home() {
           .to(content, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.2");
       });
 
-      // 3. CTA Pop-up (End of Line)
       const tlCTA = gsap.timeline({
         scrollTrigger: {
           trigger: ".process-cta-container",
@@ -320,7 +297,6 @@ export default function Home() {
               </div>
 
 
-              {/* Scroll Indicator */}
               <div
                 className="scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2 z-50 cursor-pointer mix-blend-difference"
                 onClick={() => {
@@ -374,12 +350,9 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Process Section */}
           <section className="process-section relative min-h-[150vh] bg-zinc-50 pt-32 pb-64 overflow-hidden">
 
-            {/* Master Vertical Line Container */}
             <div className="absolute top-0 left-8 md:left-1/2 w-[2px] h-full bg-zinc-200">
-              {/* The Drawing Line */}
               <div className="process-line-fill w-full h-0 bg-black origin-top"></div>
             </div>
 
@@ -398,7 +371,6 @@ export default function Home() {
                 ].map((step, index) => (
                   <div key={index} className={`process-step relative flex ${index % 2 === 0 ? 'md:justify-end' : 'md:justify-start'} w-full items-center`}>
 
-                    {/* Connector Line (Desktop Center / Mobile Left) */}
                     <div className={`
                          absolute 
                          left-8 md:left-1/2 
@@ -411,7 +383,6 @@ export default function Home() {
                          scale-x-0
                        `}></div>
 
-                    {/* Step Content */}
                     <div className={`
                          process-step-content opacity-0 translate-y-8
                          w-full md:w-[40%] 
@@ -426,9 +397,7 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* CTA End of Line */}
               <div className="process-cta-container relative flex flex-col items-center justify-center mt-32 md:mt-48 ml-8 md:ml-0">
-                {/* Arrow */}
                 <div className="process-arrow opacity-0 transform -translate-y-4 mb-4">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
