@@ -35,7 +35,42 @@ export default function Home() {
         },
       });
 
-      tl.to(".hero__cover-img", {
+      // --- Initial Ambient Animations (Breathing Grid & Scroll Indicator) ---
+
+      // 1. Ghost Projects Breathing
+      gsap.to(".ghost-project", {
+        opacity: "random(0.1, 0.3)",
+        duration: "random(1.5, 3)",
+        repeat: -1,
+        yoyo: true,
+        stagger: {
+          amount: 1,
+          from: "random"
+        },
+        ease: "sine.inOut"
+      });
+
+      // 2. Scroll Indicator Bobbing
+      gsap.to(".scroll-indicator", {
+        y: 10,
+        opacity: 1,
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+
+
+      // --- Main Scroll Timeline ---
+
+      // Fade out ambient elements immediately on scroll
+      tl.to([".ghost-project", ".scroll-indicator"], {
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.1
+      }, 0);
+
+      /* tl.to(".hero__cover-img", {
         scale: 4,
         z: 350,
         transformOrigin: "center center",
@@ -47,23 +82,23 @@ export default function Home() {
           filter: "blur(0px) brightness(1)",
           scale: 1.1,
           duration: 2
-        }, "<");
+        }, "<"); */
 
+      // Start large and visible, explicitly setting initial state
       tl.fromTo(".grid-center-image",
-        { scale: 2, opacity: 0, filter: "blur(10px)" },
-        { scale: 2, opacity: 1, filter: "blur(0px)", duration: 1, ease: "power2.out" },
-        "-=0.5"
+        {
+          scale: 3,
+          opacity: 1,
+          filter: "blur(0px)",
+        },
+        {
+          scale: 1,
+          duration: 3,
+          ease: "power2.inOut",
+        }
       );
 
-      tl.addLabel("gridReveal");
 
-      tl.to(".hero__bg", { opacity: 0, duration: 2 }, "gridReveal");
-
-      tl.to(".grid-center-image", {
-        scale: 1,
-        duration: 2,
-        ease: "power3.inOut"
-      }, "gridReveal");
 
       tl.fromTo(".grid-item-project",
         {
@@ -83,7 +118,7 @@ export default function Home() {
             from: "center"
           }
         },
-        "gridReveal+=0.5"
+        "-=1"
       );
 
       // --- Manifesto Section Animations ---
@@ -192,7 +227,7 @@ export default function Home() {
           <div className="hero-container h-screen w-full relative overflow-hidden">
             <section className="hero w-full h-full relative flex items-center justify-center">
 
-              <div className="hero__bg absolute inset-0 z-0">
+              {/* <div className="hero__bg absolute inset-0 z-0">
                 <Image
                   src="/hero-bg.png"
                   alt="Hero Background"
@@ -201,7 +236,7 @@ export default function Home() {
                   priority
                   quality={90}
                 />
-              </div>
+              </div> */}
 
               <div className="grid-layer absolute z-20 w-full max-w-4xl p-4 aspect-square max-h-[80vh]">
 
@@ -212,7 +247,7 @@ export default function Home() {
                     if (isCenter) {
                       return (
                         <div key={index} className="relative w-full h-full flex items-center justify-center z-20">
-                          <div className="grid-center-image w-full h-full rounded-2xl overflow-hidden shadow-2xl opacity-0">
+                          <div className="grid-center-image w-full h-full rounded-2xl overflow-hidden shadow-2xl">
                             <Image
                               src="/profile.jpg"
                               alt="Jainara"
@@ -224,15 +259,28 @@ export default function Home() {
                       );
                     } else {
                       return (
-                        <div key={index} className="grid-item-project w-full h-full bg-zinc-800 rounded-xl overflow-hidden border border-white/10 opacity-0 relative group cursor-pointer">
-                          <Image
-                            src={`https://picsum.photos/400?random=${index}`}
-                            alt="Projeto"
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-110"
-                          />
-                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="text-white text-sm font-bold">Ver Projeto</span>
+                        <div key={index} className="relative w-full h-full">
+                          {/* Ghost Project (Teaser) */}
+                          <div className="ghost-project absolute inset-0 z-10 w-full h-full rounded-xl overflow-hidden opacity-0">
+                            <Image
+                              src={`https://picsum.photos/400?random=${index + 10}`}
+                              alt="Ghost Project"
+                              fill
+                              className="object-cover grayscale opacity-20"
+                            />
+                          </div>
+
+                          {/* Actual Project Card */}
+                          <div className="grid-item-project w-full h-full bg-zinc-800 rounded-xl overflow-hidden border border-white/10 opacity-0 relative z-20 group cursor-pointer">
+                            <Image
+                              src={`https://picsum.photos/400?random=${index}`}
+                              alt="Projeto"
+                              fill
+                              className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                              <span className="text-white text-sm font-bold">Ver Projeto</span>
+                            </div>
                           </div>
                         </div>
                       );
@@ -242,14 +290,23 @@ export default function Home() {
 
               </div>
 
-              <div className="hero__cover absolute inset-0 z-50 flex items-center justify-center overflow-hidden pointer-events-none">
-                <Image
-                  src="/door-open.png"
-                  alt="Door"
-                  fill
-                  className="hero__cover-img object-cover pointer-events-none"
-                  priority
-                />
+
+              {/* Scroll Indicator */}
+              <div
+                className="scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer z-50 mix-blend-difference"
+                onClick={() => {
+                  window.scrollTo({ top: window.innerHeight * 0.5, behavior: "smooth" });
+                }}
+              >
+                <span className="text-white/60 text-[10px] tracking-[0.2em] font-light">EXPLORAR</span>
+                <div className="relative w-6 h-6 opacity-60">
+                  <Image
+                    src="/search.gif"
+                    alt="Scroll"
+                    fill
+                    className="object-contain invert"
+                  />
+                </div>
               </div>
 
             </section>
@@ -260,25 +317,25 @@ export default function Home() {
             <div className="manifesto-bg absolute inset-0 bg-[#ECEAE5] opacity-0 pointer-events-none z-0"></div>
 
             <div className="relative z-10 flex flex-col md:flex-row min-h-screen">
-              <div className="w-full md:w-1/2 flex items-center justify-center p-12 md:p-24">
+              <div className="w-full md:w-1/2 flex items-center justify-center p-6 md:p-24">
                 <div className="max-w-xl">
-                  <span className="manifesto-subtitle block font-sans text-xs tracking-widest uppercase mb-12 text-[#1a1a1a]/60 opacity-0 translate-y-4">Filosofia</span>
-                  <h2 className="font-(family-name:--font-playfair) text-4xl md:text-6xl leading-[1.2] text-[#1a1a1a]">
+                  <span className="manifesto-subtitle block font-sans text-xs tracking-widest uppercase mb-6 md:mb-12 text-[#1a1a1a]/60 opacity-0 translate-y-4">Filosofia</span>
+                  <h2 className="font-(family-name:--font-playfair) text-3xl md:text-6xl leading-[1.2] text-[#1a1a1a]">
                     <span className="manifesto-line block opacity-10 translate-x-[-20px] will-change-[opacity,transform]">Arquitetura não é apenas</span>
                     <span className="manifesto-line block opacity-10 translate-x-[-20px] will-change-[opacity,transform]">sobre construir espaços,</span>
                     <span className="manifesto-line block opacity-10 translate-x-[-20px] will-change-[opacity,transform]">é sobre criar</span>
                     <span className="manifesto-line block opacity-10 translate-x-[-20px] will-change-[opacity,transform]">memórias tangíveis.</span>
-                    <span className="manifesto-line block opacity-10 translate-x-[-20px] will-change-[opacity,transform] pt-8">Cada textura conta</span>
+                    <span className="manifesto-line block opacity-10 translate-x-[-20px] will-change-[opacity,transform] pt-4 md:pt-8">Cada textura conta</span>
                     <span className="manifesto-line block opacity-10 translate-x-[-20px] will-change-[opacity,transform]">uma história única.</span>
                   </h2>
 
-                  <button className="manifesto-cta mt-16 px-8 py-3 border border-[#1a1a1a] rounded-full text-sm font-medium hover:bg-[#1a1a1a] hover:text-[#ECEAE5] transition-colors opacity-0 translate-y-4 text-[#1a1a1a] cursor-pointer">
+                  <button className="manifesto-cta mt-8 md:mt-16 px-8 py-3 border border-[#1a1a1a] rounded-full text-sm font-medium hover:bg-[#1a1a1a] hover:text-[#ECEAE5] transition-colors opacity-0 translate-y-4 text-[#1a1a1a] cursor-pointer">
                     Conheça o Processo
                   </button>
                 </div>
               </div>
 
-              <div className="w-full md:w-1/2 h-[50vh] md:h-screen md:sticky md:top-0">
+              <div className="relative w-full md:w-1/2 h-[50vh] md:h-screen md:sticky md:top-0 overflow-hidden">
                 <Image
                   src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop"
                   alt="Architectural Detail"
