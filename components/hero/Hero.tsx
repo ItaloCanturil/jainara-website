@@ -5,6 +5,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ArrowUpRight } from "lucide-react";
+import SocialProof from "./SocialProof";
 
 export default function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -16,7 +17,7 @@ export default function Hero() {
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: "top top",
-                    end: "+=4000px",
+                    end: "+=1500px",
                     pin: true,
                     scrub: 1,
                 },
@@ -148,6 +149,7 @@ export default function Hero() {
                                                 className="object-cover"
                                             />
                                         </div>
+                                        <SocialProof />
                                     </div>
                                 );
                             } else {
@@ -204,7 +206,7 @@ export default function Hero() {
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
+            </section >
+        </div >
     );
 }
